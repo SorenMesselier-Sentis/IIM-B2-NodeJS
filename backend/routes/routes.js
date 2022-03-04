@@ -18,7 +18,7 @@ router.route('/user/:id')
 
 router.route('/login').post(userController.login)
 
-router.route('/mpost')
+router.route('/post')
     .get(auth, postController.index)
     .post(auth, postController.create)
 

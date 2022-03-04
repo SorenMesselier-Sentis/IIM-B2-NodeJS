@@ -1,11 +1,11 @@
-const user = require('../models/user')
+const {User} = require('../models/user')
 const bcrypt = require('bcrypt')
 const webtoken = require('jsonwebtoken')
 
 // Display all data
 
 exports.index = (req, res) => {
-    user.find((error, docs) => {
+    User.find((error, docs) => {
         if (error) {
             return res.status(500).json({ status: 'Fail', reason: error })
         }
@@ -24,15 +24,15 @@ exports.create = (req, res) => {
     const isAdmin = 0
 
     if (name == null || email == null || password == null || name == '' || email == '' || password == '') {
-        return response.status(400).json({ status: 'Fail', reason: 'Wrong parameters' })
+        return res.status(400).json({ status: 'Fail', reason: 'Wrong parameters' })
     }
 
-    user.findOne({ email: email })
+    User.findOne({ email: email })
         .then(docs => {
 
             if (docs === null) {
                 bcrypt.hash(password, 5, (error, encryptedPassword) => {
-                    const newUser = new user({
+                    const newUser = new User({
                         name: name,
                         email: email,
                         password: encryptedPassword,
@@ -43,7 +43,7 @@ exports.create = (req, res) => {
                             return res.status(400).json({ status: 'Fail to create a new user', reason: error })
                         }
                         else {
-                            return res.status(200).json({ status: 'Success', data: newUser, token: webtoken.sign({ userId: newUser._id }, 'secretToken', { expiresIn: '6h' }) })
+                            return res.status(200).json({ status: 'Success', data: newUser})
                         }
                     })
                 })
@@ -58,7 +58,7 @@ exports.create = (req, res) => {
 // Display user
 
 exports.show = (req, res) => {
-    user.findById(request.params.id, (error, docs) => {
+    User.findById(request.params.id, (error, docs) => {
         if (error) {
             return res.status(404).json({ status: 'Fail', reason: 'Any user find' })
         }
@@ -77,7 +77,7 @@ exports.update = (req, res) => {
         password: req.body.password
     }
 
-    user.findByIdAndUpdate(
+    User.findByIdAndUpdate(
         req.params.id,
         { $set: update },
         { new: true },
@@ -95,7 +95,7 @@ exports.update = (req, res) => {
 // Delete user
 
 exports.destroy = (req, res) => {
-    user.findByIdAndRemove(
+    User.findByIdAndRemove(
         req.params.id,
         (error, docs) => {
             if (error) {
@@ -117,15 +117,15 @@ exports.login = (req, res) => {
         return res.status(400).json({ status: 'Failure', reason: 'Wrong parameters' })
     }
 
-    user.findOne({ email: email })
+    User.findOne({ email: email })
         .then(docs => {
             if (docs !== null) {
                 bcrypt.compare(password, docs.password, (errCrypt, resCrypt) => {
                     if (resCrypt) {
-                        return res.status(201).json({ status: 'Success', data: docs, token: webtoken.sign({ userId: docs._id }, 'myprivatetoken', { expiresIn: '6h' }) })
+                        return res.status(201).json({ status: 'Success', data: docs, token: User.generateAuthToken })
                     }
                     else {
-                        return response.status(403).json({ status: 'Fail', reason: 'Wrong password' })
+                        return res.status(403).json({ status: 'Fail', reason: 'Wrong password' })
                     }
                 })
             }

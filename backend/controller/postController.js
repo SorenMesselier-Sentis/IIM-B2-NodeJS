@@ -1,5 +1,5 @@
 const post = require('../models/post')
-const User = require('../models/user')
+const {User} = require('../models/user')
 
 // Display all data
 
