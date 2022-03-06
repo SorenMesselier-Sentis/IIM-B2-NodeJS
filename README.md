@@ -47,7 +47,7 @@ ___
 >**Request Authorization:**
 >- The token
 
->**Request Header Parameter:**
+>**Parameter:**
 > - :id (in the url)
 
 >**Request Body:**
@@ -63,7 +63,7 @@ ___
 >**Request Headers:**
 >- The token
 
->**Request Header Parameter:**
+>**Parameter:**
 > - :id (in the url)
 
 >**Request Body:**
@@ -153,7 +153,7 @@ ___
 >**Request Authorization:**
 >- The token
 
->**Request Header Parameter:**
+>**Parameter:**
 > - :id (in the url)
 
 >**Request Body:**
@@ -170,7 +170,7 @@ ___
 >**Request Authorization:**
 >- The token
 
->**Header Parameter:**
+>**Parameter:**
 > - :id (in the url)
 
 >**Request Body:**
