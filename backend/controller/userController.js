@@ -43,7 +43,7 @@ exports.create = (req, res) => {
                             return res.status(400).json({ status: 'Fail to create a new user', reason: error })
                         }
                         else {
-                            return res.status(200).json({ status: 'Success', data: newUser})
+                            return res.status(200).json({ status: 'Success', data: newUser, token: newUser.generateAuthToken()})
                         }
                     })
                 })
@@ -122,7 +122,7 @@ exports.login = (req, res) => {
             if (docs !== null) {
                 bcrypt.compare(password, docs.password, (errCrypt, resCrypt) => {
                     if (resCrypt) {
-                        return res.status(201).json({ status: 'Success', data: docs, token: User.generateAuthToken })
+                        return res.status(201).json({ status: 'Success', data: docs, token: docs.generateAuthToken() })
                     }
                     else {
                         return res.status(403).json({ status: 'Fail', reason: 'Wrong password' })
