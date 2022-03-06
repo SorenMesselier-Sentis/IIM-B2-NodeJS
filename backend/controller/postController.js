@@ -1,10 +1,10 @@
-const post = require('../models/post')
+const Post = require('../models/post')
 const {User} = require('../models/user')
 
 // Display all data
 
 exports.index = (req, res) => {
-    post.find({})
+    Post.find({})
         .sort({ createdAt: 'asc' })
         .exec((error, docs) => {
             if (error) {
@@ -24,7 +24,7 @@ exports.create = (req, res) => {
     const postTitle = req.body.postTitle
     const post = req.body.post
 
-    User.findById(user, (docs) => {
+    User.findById(user, (error, docs) => {
         if (docs) {
             const newPost = new Post({
                 user: docs,
@@ -49,7 +49,7 @@ exports.create = (req, res) => {
 // Display all posts
 
 exports.show = (req, res) => {
-    post.find({ user: req.params.id }, (error, docs) => {
+    Post.find({ user: req.params.id }, (error, docs) => {
         if (error) {
             return res.status(400).json({ status: 'Fail to display some posts', reason: error })
         }
@@ -67,7 +67,7 @@ exports.update = (req, res) => {
         post: req.body.post
     }
 
-    post.findByIdAndUpdate(
+    Post.findByIdAndUpdate(
         req.params.id,
         { $set: update },
         { new: true },
@@ -85,7 +85,7 @@ exports.update = (req, res) => {
 // Delete a post
 
 exports.destroy = (req, res) => {
-    post.findByIdAndRemove(
+    Post.findByIdAndRemove(
         request.params.id,
         (error, docs) => {
             if (error) {
